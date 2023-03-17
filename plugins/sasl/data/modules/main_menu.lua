@@ -18,7 +18,7 @@
 -------------------------------------------------------------------------------
 
 function Show_hide_PID_UI()
-  PID_UI_window:setIsVisible(not PID_UI_window:isVisible())
+  FBW_PID_debug_window:setIsVisible(not FBW_PID_debug_window:isVisible())
 end
 
 -- create top level menu in plugins menu
