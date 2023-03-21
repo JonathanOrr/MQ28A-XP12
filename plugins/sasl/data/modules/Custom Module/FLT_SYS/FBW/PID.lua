@@ -11,6 +11,7 @@ PID = {
     maxout = 1,
     minout = -1,
 
+    PV = 0,
     error = 0,
     output = 0,
 }
@@ -35,16 +36,16 @@ end
 function PID:computePID(SP, PV)
     if get(DELTA_TIME) == 0 then return 0 end
 
-    local last_error = self.error
-    local error = SP - PV
-    self.error = error
+    local last_PV = self.PV
+    self.PV = PV
+    self.error = SP - self.PV
 
     --P--
-    self.P = self.kp * error
+    self.P = self.kp * self.error
     --I--
     self:integration()
-    --D--
-    self.D = self.kd * (error - last_error) / get(DELTA_TIME)
+    --D-- (dPVdt to avoid derivative bump)
+    self.D = self.kd * (last_PV - self.PV) / get(DELTA_TIME)
 
     return self:getOutput()
 end
