@@ -1,4 +1,4 @@
---Class declarations-- ======================================= as separators
+--Class declarations-- ================================================= as separators
 ControlSurface = {
     dataref = nil,
 

@@ -37,8 +37,6 @@ local l_main_gear_length = globalProperty("sim/aircraft/parts/acf_gear_leglen[1]
 local r_main_gear_length = globalProperty("sim/aircraft/parts/acf_gear_leglen[2]")
 
 components = {
-    rate_calculations {},
-
     filtering {},
 
     FLT_computer_main {},
