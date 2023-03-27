@@ -55,34 +55,44 @@ end
 -- VERY IMPORTANT (2): the filter function expects data FOR EACH frame after the first invocation,
 --                     otherwise garbage will be computed.
 
+LowPass = {freq = 10}
 
-function high_pass_filter(data)
-    local dt = get(DELTA_TIME)
-    local RC = 1/(2*math.pi*data.cut_frequency)
-    local a = RC / (RC + dt)
-
-    if data.prev_x_value == nil then
-        data.prev_x_value = data.x
-        data.prev_y_value = data.x
-        return data.x
-    else
-        data.prev_y_value = a * (data.prev_y_value + data.x - data.prev_x_value)
-        data.prev_x_value = data.x
-    end
-
-    return data.prev_y_value
+function LowPass:new(o)
+    o = o or {}
+    setmetatable(o, self)
+    self.__index = self
+    return o
 end
 
-function low_pass_filter(data)
+function LowPass:filterOut(x)
     local dt = get(DELTA_TIME)
-    local RC = 1/(2*math.pi*data.cut_frequency)
+    local RC = 1 / (2*math.pi * self.freq)
     local a = dt / (RC + dt)
 
-    if data.prev_y_value == nil then
-        data.prev_y_value = a * data.x
+    if self.prev_y == nil then
+        self.prev_y = a * x
     else
-        data.prev_y_value = a * data.x + (1-a) * data.prev_y_value
+        self.prev_y = a * x + (1-a) * self.prev_y
     end
 
-    return data.prev_y_value
+    return self.prev_y
+end
+
+HighPass = LowPass:new()
+
+function HighPass:filterOut(x)
+    local dt = get(DELTA_TIME)
+    local RC = 1/(2*math.pi * self.freq)
+    local a = RC / (RC + dt)
+
+    if self.prev_x == nil then
+        self.prev_x = x
+        self.prev_y = x
+        return x
+    else
+        self.prev_y = a * (self.prev_y + x - self.prev_x)
+        self.prev_x = x
+    end
+
+    return self.prev_y
 end

@@ -15,26 +15,14 @@
 -- File: FBW_main.lua
 -- Short description: Fly-by-wire main file
 -------------------------------------------------------------------------------
-
-include("FLT_SYS/FBW/Controllers/FBW_PID.lua")
-include("FLT_SYS/FBW/mode_transition/mode_transition.lua")
-
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW")
-addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/FLT_computer")
-addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/FMGEC")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/sensor_filtering")
-addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/law_reconfig")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/Augmentation/LAT")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/Augmentation/VER")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/Augmentation/YAW")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/Augmentation/LAF")
-
---xplane landing gear attitude correction--
-local front_gear_length =  globalProperty("sim/aircraft/parts/acf_gear_leglen[0]")
-local l_main_gear_length = globalProperty("sim/aircraft/parts/acf_gear_leglen[1]")
-local r_main_gear_length = globalProperty("sim/aircraft/parts/acf_gear_leglen[2]")
 
 components = {
     filtering {},
