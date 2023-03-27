@@ -9,19 +9,23 @@ end
 
 function Neutral_Nz()
     local MAX_BANK_COMP = 45
+    local INV_SMOOTH_MARGIN = 15
     local RAD_VPATH = math.rad(get(Vpath))
     local BANK = get(Flightmodel_roll)
 
-    local RAD_BANK_ClAMPED = 0
-    if BANK >= -90 and BANK <= 90 then
-        RAD_BANK_ClAMPED = math.rad(Math_clamp(BANK, -MAX_BANK_COMP, MAX_BANK_COMP))
-    elseif BANK <= -90 then
-        RAD_BANK_ClAMPED = math.rad(Math_clamp(BANK, -180, -180 + MAX_BANK_COMP))
-    elseif BANK >= 90 then
-        RAD_BANK_ClAMPED = math.rad(Math_clamp(BANK, 180 - MAX_BANK_COMP, 180))
+    local RAD_BANK = math.rad(BANK)
+    local RAD_BANK_ClAMPED = math.rad(Math_clamp(BANK, -MAX_BANK_COMP, MAX_BANK_COMP))
+    local Nz = math.cos(RAD_VPATH) / math.cos(RAD_BANK)
+    local limited_Nz = math.cos(RAD_VPATH) / math.cos(RAD_BANK_ClAMPED)
+
+    local output = limited_Nz
+    if BANK <= -180 + MAX_BANK_COMP then
+        output = SmoothRescale(1.45, -180 + MAX_BANK_COMP - INV_SMOOTH_MARGIN, Nz, -180 + MAX_BANK_COMP, limited_Nz, BANK)
+    elseif BANK >= 180 - MAX_BANK_COMP then
+        output = SmoothRescale(1.45, 180 - MAX_BANK_COMP, limited_Nz, 180 - MAX_BANK_COMP + INV_SMOOTH_MARGIN, Nz, BANK)
     end
 
-    return math.cos(RAD_VPATH) / math.cos(RAD_BANK_ClAMPED)
+    return output
 end
 
 function ComputeCSTAR(Nz, Q)

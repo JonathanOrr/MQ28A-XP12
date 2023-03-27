@@ -21,8 +21,7 @@ ThetaDot = angularRateCmp:new{
     getRate = function (self)
         local roll = get(Flightmodel_roll)
 
-        self.rad = get(Flightmodel_q) * mcos(roll) + get(Flightmodel_r) * msin(roll)
-        self.deg = (self.rad / math.pi) * 180
+        return get(Flightmodel_q) * mcos(roll) + get(Flightmodel_r) * msin(roll)
     end
 }
 PhiDot = angularRateCmp:new{
@@ -30,8 +29,7 @@ PhiDot = angularRateCmp:new{
         local roll = get(Flightmodel_roll)
         local pitch = get(Flightmodel_pitch)
 
-        self.rad = get(Flightmodel_p) + (get(Flightmodel_q) * msin(roll) + get(Flightmodel_r) * mcos(roll)) * mtan(pitch)
-        self.deg = (self.rad / math.pi) * 180
+        return get(Flightmodel_p) + (get(Flightmodel_q) * msin(roll) + get(Flightmodel_r) * mcos(roll)) * mtan(pitch)
     end
 }
 PsiDot = angularRateCmp:new{
@@ -39,7 +37,6 @@ PsiDot = angularRateCmp:new{
         local roll = get(Flightmodel_roll)
         local pitch = get(Flightmodel_pitch)
 
-        self.rad = (get(Flightmodel_q) * msin(roll) + get(Flightmodel_r) * mcos(roll)) / mcos(pitch)
-        self.deg = (self.rad / math.pi) * 180
+        return (get(Flightmodel_q) * msin(roll) + get(Flightmodel_r) * mcos(roll)) / mcos(pitch)
     end
 }

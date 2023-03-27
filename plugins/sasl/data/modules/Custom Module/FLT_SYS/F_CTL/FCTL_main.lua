@@ -80,6 +80,6 @@ function update()
     FCTL.L_FLAPERON:actuate(get(FBW_PITCH_DEF) + get(FCTL_INPUT_X) *  30)
     FCTL.R_FLAPERON:actuate(get(FBW_PITCH_DEF) + get(FCTL_INPUT_X) * -30)
 
-    FCTL.L_RUDDERVATOR:actuate(get(FBW_PITCH_DEF) + get(FCTL_INPUT_YAW) *  30)
-    FCTL.R_RUDDERVATOR:actuate(get(FBW_PITCH_DEF) + get(FCTL_INPUT_YAW) * -30)
+    FCTL.L_RUDDERVATOR:actuate(get(FBW_PITCH_DEF) - get(FBW_YAW_DEF))
+    FCTL.R_RUDDERVATOR:actuate(get(FBW_PITCH_DEF) + get(FBW_YAW_DEF))
 end

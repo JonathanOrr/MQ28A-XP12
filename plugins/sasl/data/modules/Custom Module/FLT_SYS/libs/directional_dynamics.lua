@@ -6,5 +6,5 @@ function Theoretical_R()
     local RAD_VPATH = math.rad(get(Vpath))
     local RAD_ROLL = math.rad(get(Flightmodel_roll))
 
-    return (g / TAS_MS) * (msin(RAD_ROLL) * mcos(RAD_VPATH) + get(Total_lateral_g_load))
+    return (g / TAS_MS) * (msin(RAD_ROLL) * mcos(RAD_VPATH)) --+ get(Total_lateral_g_load))
 end

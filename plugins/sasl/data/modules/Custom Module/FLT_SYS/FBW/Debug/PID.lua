@@ -144,7 +144,8 @@ function update()
     if not FBW_PID_debug_window:isVisible() then return end
 
     Grapher_update(test_tbl, {
-        qPID = {graph = true, number = true, color = ECAM_RED, value = FBW.PIDs.q.output},
+        ["q PID output"] = {graph = true, number = true, color = ECAM_WHITE, value = FBW.PIDs.q.output},
+        ["q PID error"] = {graph = true, number = true, color = ECAM_RED, value = FBW.PIDs.q.error},
         --NY = {graph = true, number = true, color = ECAM_GREEN, value = FBW.vertical.dynamics.Path_Load_Factor("y")},
         --NZ = {graph = true, number = true, color = ECAM_BLUE, value = FBW.vertical.dynamics.Path_Load_Factor("z")},
     })

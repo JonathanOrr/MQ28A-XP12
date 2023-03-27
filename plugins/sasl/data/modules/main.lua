@@ -24,7 +24,6 @@ include("global_variables.lua")
 include("global_functions.lua")
 include("graphics_helpers.lua")
 include("global_constants.lua")
-include("PID.lua")
 include("FLT_SYS/FBW/PID_arrays.lua")
 
 sasl.options.setAircraftPanelRendering(true)

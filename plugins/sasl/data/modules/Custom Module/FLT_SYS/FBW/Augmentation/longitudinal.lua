@@ -1,4 +1,4 @@
-FBW.PIDs.q = BPPID:new{kp = -20, ki = -55, kbp = 1, minout = -30, maxout = 30}
+FBW.PIDs.q = BPPID:new{kp = -15, ki = -50, kbp = 1, minout = -30, maxout = 30}
 FBW.PIDs.alpha = BPPID:new{kp = 0.8, ki = 1.2, kd = 0.25, kbp = 1, minout = -30, maxout = 30}
 
 --====input processing====
@@ -20,8 +20,8 @@ function update()
     local PO = (
             FCTL.L_FLAPERON.def - get(FCTL_INPUT_X) *  30 +
             FCTL.R_FLAPERON.def - get(FCTL_INPUT_X) * -30 +
-            FCTL.L_RUDDERVATOR.def - get(FCTL_INPUT_YAW) *  30 +
-            FCTL.R_RUDDERVATOR.def - get(FCTL_INPUT_YAW) * -30
+            FCTL.L_RUDDERVATOR.def + get(FBW_YAW_DEF) +
+            FCTL.R_RUDDERVATOR.def - get(FBW_YAW_DEF)
     ) / 4
     FBW.PIDs.q:backPropagation(PO)
 
