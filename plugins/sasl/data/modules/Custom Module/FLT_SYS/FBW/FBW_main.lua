@@ -19,6 +19,8 @@ addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/Augmentation")
 
 components = {
     longitudinal {},
+    lateral {},
+    directional {},
 }
 
 function update()

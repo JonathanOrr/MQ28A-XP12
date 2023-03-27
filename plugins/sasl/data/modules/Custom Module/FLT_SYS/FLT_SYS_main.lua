@@ -2,6 +2,8 @@ include("FLT_SYS/libs/angular_rates.lua")
 include("FLT_SYS/libs/PID.lua")
 include("FLT_SYS/libs/signal_processing.lua")
 include("FLT_SYS/libs/longitudinal_dynamics.lua")
+include("FLT_SYS/libs/lateral_dynamics.lua")
+include("FLT_SYS/libs/directional_dynamics.lua")
 
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW")
