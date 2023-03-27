@@ -50,23 +50,23 @@ function PID:computePID(SP, PV)
     return self:getOutput()
 end
 --====================================================================================
-BPAWPID = PID:new{
+BPPID = PID:new{
     kbp = 1,
     BP = 0,
     plantOutput = 0,
 }
 
-function BPAWPID:backPropagation(PO)
+function BPPID:backPropagation(PO)
     self.plantOutput = PO
     self.BP = self.kbp * (self.plantOutput - self.output)
 end
 
-function BPAWPID:integration()
+function BPPID:integration()
     local termToAdd = self.ki * self.error + self.BP
     self.I = Math_clamp(self.I + termToAdd * get(DELTA_TIME), self.minout, self.maxout)
 end
 --====================================================================================
-BPFFPID = BPAWPID:new{
+BPFFPID = BPPID:new{
     FF = 0,
 }
 

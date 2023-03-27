@@ -13,8 +13,7 @@ function onPlaneLoaded() set(Override_control_surfaces, 1) end
 function onAirportLoaded() set(Override_control_surfaces, 1) end
 function onModuleShutdown() set(Override_control_surfaces, 0) end
 
-FCTL = {}
-FBW = {}
+FBW.PIDs = {}
 
 components = {
     FCTL_main {},
