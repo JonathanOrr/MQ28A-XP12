@@ -1,4 +1,4 @@
-FBW.filtered_sensors = {
+FBW.filteredSensors = {
     AoA = {
         filter = LowPass:new{freq = 0.25},
         output = 0,
@@ -42,7 +42,7 @@ FBW.filtered_sensors = {
 function update()
     if get(DELTA_TIME) == 0 then return end
 
-    for _, tbl in pairs(FBW.filtered_sensors) do
+    for _, tbl in pairs(FBW.filteredSensors) do
         tbl.output = tbl.filter:filterOut(tbl.x())
     end
 end
