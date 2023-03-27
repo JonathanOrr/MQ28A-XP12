@@ -13,6 +13,18 @@
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
 
+function SmoothRescale(k, in1, out1, in2, out2, x)
+    k = math.max(out1, out2) == out2 and k or -k
+
+    x = Math_clamp(x, in1, in2)
+    x = (x - in1) / (in2 - in1)
+
+    local y = (math.tanh(k * (2*x - 1) / (2 * math.sqrt((1 - x) * x))) + 1) / 2
+    y = y * math.abs(out2 - out1) + math.min(out1, out2)
+
+    return y
+end
+
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 -- RATE COMPUTATION
