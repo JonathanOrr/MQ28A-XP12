@@ -747,9 +747,9 @@ FCTL_INPUT_Y =   globalProperty("sim/joystick/yoke_pitch_ratio")
 FCTL_INPUT_YAW = globalProperty("sim/joystick/yoke_heading_ratio")
 
 --outputs--
-FBW_roll_output =  createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_roll_output", 0, false, true, false)
-FBW_pitch_output = createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_pitch_output", 0, false, true, false)
-FBW_yaw_output =   createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_yaw_output", 0, false, true, false)
+FBW_ROLL_DEF =  createGlobalPropertyf("MQ28/dynamics/FBW/outputs/fbw_roll_def", 0, false, true, false)
+FBW_PITCH_DEF = createGlobalPropertyf("MQ28/dynamics/FBW/outputs/fbw_pitch_def", 0, false, true, false)
+FBW_YAW_DEF =   createGlobalPropertyf("MQ28/dynamics/FBW/outputs/fbw_yaw_def", 0, false, true, false)
 
 --flight envelope "sensors"
 Weather_Sigma =   globalProperty("sim/weather/sigma")
