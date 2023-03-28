@@ -1,3 +1,4 @@
+include("FLT_SYS/libs/numerical_math.lua")
 include("FLT_SYS/libs/angular_rates.lua")
 include("FLT_SYS/libs/PID.lua")
 include("FLT_SYS/libs/signal_processing.lua")

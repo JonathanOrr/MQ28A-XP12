@@ -18,8 +18,8 @@ end
 
 function update()
     local PO = (
-            FCTL.L_FLAPERON.def - get(FCTL_INPUT_X) *  30 +
-            FCTL.R_FLAPERON.def - get(FCTL_INPUT_X) * -30 +
+            FCTL.L_FLAPERON.def - get(FBW_ROLL_DEF) +
+            FCTL.R_FLAPERON.def + get(FBW_ROLL_DEF) +
             FCTL.L_RUDDERVATOR.def + get(FBW_YAW_DEF) +
             FCTL.R_RUDDERVATOR.def - get(FBW_YAW_DEF)
     ) / 4

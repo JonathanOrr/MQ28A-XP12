@@ -77,9 +77,9 @@ FCTL.R_RUDDERVATOR = Ruddervators:new{dataref = R_RUD}
 function update()
     FCTL.LE_SLAT:alphaDeploy()
 
-    FCTL.L_FLAPERON:actuate(get(FBW_PITCH_DEF) + get(FCTL_INPUT_X) *  30)
-    FCTL.R_FLAPERON:actuate(get(FBW_PITCH_DEF) + get(FCTL_INPUT_X) * -30)
+    FCTL.L_FLAPERON:actuate(get(FBW_PITCH_DEF) + get(FBW_ROLL_DEF))
+    FCTL.R_FLAPERON:actuate(get(FBW_PITCH_DEF) - get(FBW_ROLL_DEF))
 
-    FCTL.L_RUDDERVATOR:actuate(get(FBW_PITCH_DEF) - get(FBW_YAW_DEF))
-    FCTL.R_RUDDERVATOR:actuate(get(FBW_PITCH_DEF) + get(FBW_YAW_DEF))
+    FCTL.L_RUDDERVATOR:actuate(get(FBW_PITCH_DEF) - get(FBW_YAW_DEF) - get(FCTL_INPUT_YAW) * 30)
+    FCTL.R_RUDDERVATOR:actuate(get(FBW_PITCH_DEF) + get(FBW_YAW_DEF) + get(FCTL_INPUT_YAW) * 30)
 end

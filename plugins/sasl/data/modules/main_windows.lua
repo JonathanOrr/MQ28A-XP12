@@ -16,8 +16,6 @@
 -- Short description: The file containing the code for the windows
 -------------------------------------------------------------------------------
 
-addSearchPath(moduleDirectory .. "/Custom Module/debug_windows/")
-
 --FLT SYS debug windows--
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/Debug")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/Debug")
