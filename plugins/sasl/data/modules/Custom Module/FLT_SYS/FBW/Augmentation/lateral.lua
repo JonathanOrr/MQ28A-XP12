@@ -28,21 +28,19 @@ local function X_to_P(x)
 end
 --========================
 
-FBW.PIDs.phidot = BPPID:new{kp = 0.125, ki = 1, kbp = 0, minout = -30, maxout = 30}
+FBW.PIDs.p = BPPID:new{kp = 0.125, ki = 1, kbp = 0, minout = -30, maxout = 30}
 
 function update()
     local PO = (
             FCTL.L_FLAPERON.def - get(FBW_PITCH_DEF) +
             FCTL.R_FLAPERON.def - get(FBW_PITCH_DEF)
     ) / 2
-    FBW.PIDs.phidot:backPropagation(PO)
-
-    local output = FBW.PIDs.phidot:computePID(
-        X_to_P(get(FCTL_INPUT_X)),
-        get(Flightmodel_p_deg)
-    )
+    FBW.PIDs.p:backPropagation(PO)
 
     set(FBW_ROLL_DEF,
-        output
+        FBW.PIDs.p:computePID(
+            X_to_P(get(FCTL_INPUT_X)),
+            get(Flightmodel_p_deg)
+        )
     )
 end
