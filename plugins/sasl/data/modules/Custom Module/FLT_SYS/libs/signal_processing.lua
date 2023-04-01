@@ -25,6 +25,89 @@ function SmoothRescale(k, in1, out1, in2, out2, x)
     return y
 end
 
+---get the dominant / fastest moving frequency
+---@param t table
+---@param y table
+---@return number f
+function GetDominantFreq(t, y)
+    -- check if the input data has the same size
+    assert(#t == #y, "Input data dimensions do not match")
+
+    local N = #t           -- number of data points
+    local dt = t[2] - t[1] -- time step
+
+    -- compute the FFT of the signal
+    local y_fft_real = {}
+    local y_fft_imag = {}
+    for k = 1, N do
+        y_fft_real[k] = 0
+        y_fft_imag[k] = 0
+        for n = 1, N do
+            y_fft_real[k] = y_fft_real[k] + y[n] * math.cos(-2 * math.pi * (k - 1) * (n - 1) / N)
+            y_fft_imag[k] = y_fft_imag[k] + y[n] * math.sin(-2 * math.pi * (k - 1) * (n - 1) / N)
+        end
+    end
+
+    -- compute the absolute values of the FFT
+    local y_fft_abs = {}
+    for k = 1, N / 2 do
+        y_fft_abs[k] = math.sqrt(y_fft_real[k] ^ 2 + y_fft_imag[k] ^ 2)
+    end
+
+    -- find the index of the maximum FFT value
+    local max_idx = 1
+    local max_val = y_fft_abs[1]
+    for i = 2, N / 2 do
+        if y_fft_abs[i] > max_val then
+            max_idx = i
+            max_val = y_fft_abs[i]
+        end
+    end
+
+    -- compute the frequency corresponding to the maximum FFT value
+    local f = (max_idx - 1) / (N * dt)
+
+    return f
+end
+
+---get all the frequencys that makes up the signal, and their coresponding transform amplitude
+---@param t table
+---@param y table
+---@return table freq, table y_fft_abs, table y_fft_real, table y_fft_imag
+function FFT_frequencies(t, y)
+    -- check if the input data has the same size
+    assert(#t == #y, "Input data dimensions do not match")
+
+    local N = #t                   -- number of data points
+    local dt = (t[N] - t[1]) / (N - 1) -- average time step
+
+    -- compute the FFT of the signal
+    local y_fft_real = {}
+    local y_fft_imag = {}
+    for k = 1, N do
+        y_fft_real[k] = 0
+        y_fft_imag[k] = 0
+        for n = 1, N do
+            y_fft_real[k] = y_fft_real[k] + y[n] * math.cos(-2 * math.pi * (k - 1) * (n - 1) / N)
+            y_fft_imag[k] = y_fft_imag[k] + y[n] * math.sin(-2 * math.pi * (k - 1) * (n - 1) / N)
+        end
+    end
+
+    -- compute the absolute values of the FFT
+    local y_fft_abs = {}
+    for k = 1, N / 2 do
+        y_fft_abs[k] = math.sqrt(y_fft_real[k] ^ 2 + y_fft_imag[k] ^ 2)
+    end
+
+    -- compute the frequencies corresponding to each FFT component
+    local freqs = {}
+    for k = 1, N / 2 do
+        freqs[k] = (k - 1) / (N * dt)
+    end
+
+    return freqs, y_fft_abs, y_fft_real, y_fft_imag
+end
+
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 -- RATE COMPUTATION
