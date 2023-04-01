@@ -62,8 +62,24 @@ function BPPID:backPropagation(PO)
 end
 
 function BPPID:integration()
-    local termToAdd = self.ki * self.error + self.BP
-    self.I = Math_clamp(self.I + termToAdd * get(DELTA_TIME), self.minout, self.maxout)
+    if self.kbp < 1 then
+        self.I = Math_clamp(self.I + self.ki * self.error * get(DELTA_TIME) + self.BP, self.minout, self.maxout)
+    else
+        self.I = self.I + self.ki * self.error * get(DELTA_TIME) + self.BP
+    end
+end
+
+function BPPID:getOutput()
+    local PIDsum = self.P + self.I + self.D
+
+    if self.kbp < 1 then
+        self.output = Math_clamp(PIDsum, self.minout, self.maxout)
+    else
+        self.output = Math_clamp(PIDsum, self.minout, self.maxout)
+        self.I = self.I + self.kbp * (self.output - PIDsum)
+    end
+
+    return self.output
 end
 --====================================================================================
 BPFFPID = BPPID:new{
@@ -84,7 +100,14 @@ function BPFFPID:feedForward(kff, FFPV)
 end
 
 function BPFFPID:getOutput()
-    self.output = Math_clamp(self.P + self.I + self.D, self.minout, self.maxout)
+    local PIDsum = self.P + self.I + self.D
+
+    if self.kbp < 1 then
+        self.output = Math_clamp(PIDsum, self.minout, self.maxout)
+    else
+        self.output = Math_clamp(PIDsum, self.minout, self.maxout)
+        self.I = self.I + self.kbp * (self.output - PIDsum)
+    end
 
     return self.output + self.FF
 end

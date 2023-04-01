@@ -739,6 +739,7 @@ PANEL_AA_LEVEL_1to32 = createGlobalPropertyi("a321neo/panels/antialiasing_lvl_ac
 --Surfaces / FBW / flight controls--
 --dev & debuging
 Override_artstab = 			globalProperty("sim/operation/override/override_artstab")
+Override_forces =           globalProperty("sim/operation/override/override_forces")
 Override_control_surfaces = globalProperty("sim/operation/override/override_control_surfaces")
 
 --inputs--
@@ -781,13 +782,39 @@ Flightmodel_x =  globalProperty("sim/flightmodel/position/local_x")
 Flightmodel_y =  globalProperty("sim/flightmodel/position/local_y")
 Flightmodel_z =  globalProperty("sim/flightmodel/position/local_z")
 
-Total_vertical_g_load        = globalProperty("sim/flightmodel2/misc/gforce_normal")
-Total_lateral_g_load         = globalProperty("sim/flightmodel2/misc/gforce_side")
-Total_long_g_load            = globalProperty("sim/flightmodel2/misc/gforce_axil")
-Flightmodel_aero_norm_forces = globalProperty("sim/flightmodel/forces/fnrml_aero")
-Flightmodel_TOT_NRM_FORCE    = globalProperty("sim/flightmodel/forces/fnrml_total")
-Flightmodel_TOT_AXL_FORCE    = globalProperty("sim/flightmodel/forces/faxil_total")
-Flightmodel_TOT_SDE_FORCE    = globalProperty("sim/flightmodel/forces/fside_total")
+Total_vertical_g_load     = globalProperty("sim/flightmodel2/misc/gforce_normal")
+Total_lateral_g_load      = globalProperty("sim/flightmodel2/misc/gforce_side")
+Total_long_g_load         = globalProperty("sim/flightmodel2/misc/gforce_axil")
+
+Flightmodel_GEAR_NRM_FORCE = globalProperty("sim/flightmodel/forces/fnrml_gear")
+Flightmodel_GEAR_AXL_FORCE = globalProperty("sim/flightmodel/forces/faxil_gear")
+Flightmodel_GEAR_SDE_FORCE = globalProperty("sim/flightmodel/forces/fside_gear")
+Flightmodel_PROP_NRM_FORCE = globalProperty("sim/flightmodel/forces/fnrml_prop")
+Flightmodel_PROP_AXL_FORCE = globalProperty("sim/flightmodel/forces/faxil_prop")
+Flightmodel_PROP_SDE_FORCE = globalProperty("sim/flightmodel/forces/fside_prop")
+Flightmodel_AERO_NRM_FORCE = globalProperty("sim/flightmodel/forces/fnrml_aero")
+Flightmodel_AERO_AXL_FORCE = globalProperty("sim/flightmodel/forces/faxil_aero")
+Flightmodel_AERO_SDE_FORCE = globalProperty("sim/flightmodel/forces/fside_aero")
+Flightmodel_TOT_NRM_FORCE  = globalProperty("sim/flightmodel/forces/fnrml_total")
+Flightmodel_TOT_AXL_FORCE  = globalProperty("sim/flightmodel/forces/faxil_total")
+Flightmodel_TOT_SDE_FORCE  = globalProperty("sim/flightmodel/forces/fside_total")
+
+Flightmodel_GEAR_L = globalProperty("sim/flightmodel/forces/L_gear")
+Flightmodel_GEAR_M = globalProperty("sim/flightmodel/forces/M_gear")
+Flightmodel_GEAR_N = globalProperty("sim/flightmodel/forces/N_gear")
+Flightmodel_MASS_L = globalProperty("sim/flightmodel/forces/L_mass")
+Flightmodel_MASS_M = globalProperty("sim/flightmodel/forces/M_mass")
+Flightmodel_MASS_N = globalProperty("sim/flightmodel/forces/N_mass")
+Flightmodel_PROP_L = globalProperty("sim/flightmodel/forces/L_prop")
+Flightmodel_PROP_M = globalProperty("sim/flightmodel/forces/M_prop")
+Flightmodel_PROP_N = globalProperty("sim/flightmodel/forces/N_prop")
+Flightmodel_AERO_L = globalProperty("sim/flightmodel/forces/L_aero")
+Flightmodel_AERO_M = globalProperty("sim/flightmodel/forces/M_aero")
+Flightmodel_AERO_N = globalProperty("sim/flightmodel/forces/N_aero")
+Flightmodel_TOT_L  = globalProperty("sim/flightmodel/forces/L_total")
+Flightmodel_TOT_M  = globalProperty("sim/flightmodel/forces/M_total")
+Flightmodel_TOT_N  = globalProperty("sim/flightmodel/forces/N_total")
+
 Flightmodel_LIFT = globalProperty("sim/flightmodel/forces/lift_path_axis")
 Flightmodel_DRAG = globalProperty("sim/flightmodel/forces/drag_path_axis")
 Flightmodel_SIDE = globalProperty("sim/flightmodel/forces/side_path_axis")
@@ -814,6 +841,8 @@ FBW_lateral_ground_mode_ratio =    createGlobalPropertyf("a321neo/dynamics/FBW/s
 FBW_lateral_flight_mode_ratio =    createGlobalPropertyf("a321neo/dynamics/FBW/system_status/lateral_flight_mode_ratio", 0, false, true, false)   --FBW lateral  flight   mode transition ratio
 FBW_flare_mode_memorised_att = createGlobalPropertyf("a321neo/dynamics/FBW/system_status/flare_mode_memorised_attitude", 0, false, true, false)--FBW flare mode memorised att at 50ft RA or 100ft RA
 FBW_flare_mode_computed_Q =    createGlobalPropertyf("a321neo/dynamics/FBW/system_status/flare_mode_computed_Q", 0, false, true, false)--FBW flare mode computed pitch rate 8 seconds from memorised ATT --> -2 degrees
+--spdbrake
+SPDBRK_RAT = globalProperty("sim/flightmodel2/controls/speedbrake_ratio")
 --ailerons
 L_AIL = globalProperty("sim/flightmodel/controls/wing1l_ail1def") -- -30 deg up 30 deg down
 R_AIL = globalProperty("sim/flightmodel/controls/wing1r_ail1def") -- -30 deg up 30 deg down

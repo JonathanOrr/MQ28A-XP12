@@ -28,14 +28,15 @@ local function X_to_P(x)
 end
 --========================
 
-FBW.PIDs.p = BPPID:new{kp = 0.125, ki = 1, kbp = 0, minout = -30, maxout = 30}
+--FBW.PIDs.p = BPPID:new{kp = 0.125, ki = 1, kbp = 1, minout = -30, maxout = 30}
+FBW.PIDs.p = PID:new{kp = 800, ki = 100, kd = 0, minout = -100000, maxout = 100000}
 
 function update()
     local PO = (
             FCTL.L_FLAPERON.def - get(FBW_PITCH_DEF) +
             FCTL.R_FLAPERON.def - get(FBW_PITCH_DEF)
     ) / 2
-    FBW.PIDs.p:backPropagation(PO)
+    --FBW.PIDs.p:backPropagation(PO)
 
     set(FBW_ROLL_DEF,
         FBW.PIDs.p:computePID(

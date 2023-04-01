@@ -4,7 +4,7 @@ local test_tbl = {
     w = 700,
     h = 500,
     xlim = 5, --in seconds
-    ylim = {-5, 5},
+    ylim = {-200000, 200000},
     xbars = {1, 2, 3, 4},
     ybars = nil,
     data = {},
@@ -144,8 +144,8 @@ function update()
     if not FBW_PID_debug_window:isVisible() then return end
 
     Grapher_update(test_tbl, {
-        ["p PID output"] = {graph = true, number = true, color = ECAM_WHITE, value = FBW.PIDs.p.output},
-        ["p PID error"] = {graph = true, number = true, color = ECAM_RED, value = FBW.PIDs.p.error},
+        ["alpha PID output"] = {graph = true, number = true, color = ECAM_WHITE, value = FBW.PIDs.alphaMax.output},
+        ["q PID output"] = {graph = true, number = true, color = ECAM_MAGENTA, value = FBW.PIDs.q.output},
         --NY = {graph = true, number = true, color = ECAM_GREEN, value = FBW.vertical.dynamics.Path_Load_Factor("y")},
         --NZ = {graph = true, number = true, color = ECAM_BLUE, value = FBW.vertical.dynamics.Path_Load_Factor("z")},
     })

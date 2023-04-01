@@ -74,12 +74,55 @@ FCTL.R_FLAPERON = Flaperons:new{dataref = R_AIL}
 FCTL.L_RUDDERVATOR = Ruddervators:new{dataref = L_RUD}
 FCTL.R_RUDDERVATOR = Ruddervators:new{dataref = R_RUD}
 
+set(Override_forces, 1)
+function onPlaneLoaded() set(Override_forces, 1) end
+function onAirportLoaded() set(Override_forces, 1) end
+function onModuleShutdown() set(Override_forces, 0) end
+
 function update()
+    set(Flightmodel_TOT_NRM_FORCE,
+        get(Flightmodel_GEAR_NRM_FORCE) +
+        get(Flightmodel_PROP_NRM_FORCE) +
+        get(Flightmodel_AERO_NRM_FORCE)
+    )
+    set(Flightmodel_TOT_AXL_FORCE,
+        get(Flightmodel_GEAR_AXL_FORCE) +
+        get(Flightmodel_PROP_AXL_FORCE) +
+        get(Flightmodel_AERO_AXL_FORCE)
+    )
+    set(Flightmodel_TOT_SDE_FORCE,
+        get(Flightmodel_GEAR_SDE_FORCE) +
+        get(Flightmodel_PROP_SDE_FORCE) +
+        get(Flightmodel_AERO_SDE_FORCE)
+    )
+
+    set(Flightmodel_TOT_L,
+        get(Flightmodel_GEAR_L) +
+        get(Flightmodel_MASS_L) +
+        get(Flightmodel_PROP_L) +
+        get(Flightmodel_AERO_L) +
+        get(FBW_ROLL_DEF)
+    )
+    set(Flightmodel_TOT_M,
+        get(Flightmodel_GEAR_M) +
+        get(Flightmodel_MASS_M) +
+        get(Flightmodel_PROP_M) +
+        get(Flightmodel_AERO_M) +
+        get(FBW_PITCH_DEF)
+    )
+    set(Flightmodel_TOT_N,
+        get(Flightmodel_GEAR_N) +
+        get(Flightmodel_MASS_N) +
+        get(Flightmodel_PROP_N) +
+        get(Flightmodel_AERO_N) +
+        get(FBW_YAW_DEF)
+    )
+
     FCTL.LE_SLAT:alphaDeploy()
 
-    FCTL.L_FLAPERON:actuate(get(FBW_PITCH_DEF) + get(FBW_ROLL_DEF))
-    FCTL.R_FLAPERON:actuate(get(FBW_PITCH_DEF) - get(FBW_ROLL_DEF))
+    FCTL.L_FLAPERON:actuate(-get(FCTL_INPUT_Y) * 30 + get(FCTL_INPUT_X) * 30)
+    FCTL.R_FLAPERON:actuate(-get(FCTL_INPUT_Y) * 30 - get(FCTL_INPUT_X) * 30)
 
-    FCTL.L_RUDDERVATOR:actuate(get(FBW_PITCH_DEF) - get(FBW_YAW_DEF) - get(FCTL_INPUT_YAW) * 30)
-    FCTL.R_RUDDERVATOR:actuate(get(FBW_PITCH_DEF) + get(FBW_YAW_DEF) + get(FCTL_INPUT_YAW) * 30)
+    FCTL.L_RUDDERVATOR:actuate(-get(FCTL_INPUT_Y) * 30 - get(FCTL_INPUT_YAW) * 30)
+    FCTL.R_RUDDERVATOR:actuate(-get(FCTL_INPUT_Y) * 30 + get(FCTL_INPUT_YAW) * 30)
 end

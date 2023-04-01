@@ -25,4 +25,18 @@ components = {
 
 function update()
     updateAll(components)
+
+    local maxL = 100000
+    local maxM = 18000
+    local maxN = 100000
+
+    local TASL = SmoothRescale(2.5, 0, 0, 70, maxL, get(TAS_ms) * 1.944)
+    local TASM = SmoothRescale(2.5, 0, 0, 70, maxM, get(TAS_ms) * 1.944)
+    local TASN = SmoothRescale(2.5, 0, 0, 70, maxN, get(TAS_ms) * 1.944)
+
+    FBW.PIDs.p.maxout,               FBW.PIDs.p.minout = TASL, -TASL
+    FBW.PIDs.q.maxout,               FBW.PIDs.q.minout = TASM, -TASM
+    FBW.PIDs.alphaMin.maxout, FBW.PIDs.alphaMin.minout = TASM, -TASM
+    FBW.PIDs.alphaMax.maxout, FBW.PIDs.alphaMax.minout = TASM, -TASM
+    FBW.PIDs.r.maxout,               FBW.PIDs.r.minout = TASN, -TASN
 end
