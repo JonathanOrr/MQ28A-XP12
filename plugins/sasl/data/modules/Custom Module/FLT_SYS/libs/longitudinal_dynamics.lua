@@ -9,21 +9,18 @@ end
 
 function Neutral_Nz()
     local MAX_BANK_COMP = 45
-    local INV_SMOOTH_MARGIN = 20
     local RAD_VPATH = math.rad(get(Vpath))
 
     local BANK = math.abs(get(Flightmodel_roll))
-    local RAD_BANK = math.abs(math.rad(BANK))
     local RAD_BANK_ClAMPED = math.rad(Math_clamp_higher(BANK, MAX_BANK_COMP))
 
-    local Nz = math.cos(RAD_VPATH) / math.cos(RAD_BANK)
-    local limited_Nz = math.cos(RAD_VPATH) / math.cos(RAD_BANK_ClAMPED)
+    local Nz = math.cos(RAD_VPATH) / math.cos(RAD_BANK_ClAMPED)
 
-    local output = limited_Nz
-    if BANK >= 90 and BANK < 180 - MAX_BANK_COMP then
-        output = SmoothRescale(1.45, 90, limited_Nz, 90 + INV_SMOOTH_MARGIN, math.cos(RAD_VPATH), BANK)
-    elseif BANK >= 180 - MAX_BANK_COMP then
-        output = SmoothRescale(1.45, 180 - MAX_BANK_COMP, limited_Nz, 180 - MAX_BANK_COMP + INV_SMOOTH_MARGIN, Nz, BANK)
+    local output = Nz
+    if BANK >= MAX_BANK_COMP then
+        output = SmoothRescale(1.45, MAX_BANK_COMP, Nz, 90, math.cos(RAD_VPATH), BANK)
+    elseif BANK <= -MAX_BANK_COMP then
+        output = SmoothRescale(1.45, -90, math.cos(RAD_VPATH), -MAX_BANK_COMP, Nz, BANK)
     end
 
     return output

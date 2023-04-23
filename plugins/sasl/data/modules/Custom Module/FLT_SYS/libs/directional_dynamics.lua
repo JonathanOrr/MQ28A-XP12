@@ -7,7 +7,6 @@ function Theoretical_R()
     local RAD_ROLL = math.rad(get(Flightmodel_roll))
 
     local output = (g / TAS_MS) * (msin(RAD_ROLL) * mcos(RAD_VPATH)) --+ get(Total_lateral_g_load))
-    output = SmoothRescale(2.5, 35, 0, 45, output, TAS_MS) -- for stability at low speed
 
     return output
 end

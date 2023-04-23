@@ -141,7 +141,7 @@ local M28SuperManSys = superManeuverSys:new{
     },
     M = {
         dataref = Flightmodel_PLG_M,
-        limit = 50000,
+        limit = 100000,
         maxTAS = 70,
         surfs = {
             {obj = FCTL.L_FLAPERON, reversed = true},

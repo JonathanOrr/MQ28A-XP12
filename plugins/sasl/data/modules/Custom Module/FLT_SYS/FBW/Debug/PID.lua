@@ -166,7 +166,6 @@ function update()
     Grapher_update(test_tbl, {
         ["alphaMax PID output"] = {graph = true, number = true, color = ECAM_RED, value = FBW.PIDs.alphaMax.output},
         ["Q PID output"] = {graph = true, number = true, color = ECAM_MAGENTA, value = FBW.PIDs.q.output},
-        ["alphaMin PID output"] = {graph = true, number = true, color = ECAM_WHITE, value = FBW.PIDs.alphaMin.output},
         --NY = {graph = true, number = true, color = ECAM_GREEN, value = FBW.vertical.dynamics.Path_Load_Factor("y")},
         --NZ = {graph = true, number = true, color = ECAM_BLUE, value = FBW.vertical.dynamics.Path_Load_Factor("z")},
     })
