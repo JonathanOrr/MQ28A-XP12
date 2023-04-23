@@ -1,10 +1,14 @@
+local tunnerkP = createGlobalPropertyf("MQ28/dynamics/FBW/livetuning/kp", 0, false, true, false)
+local tunnerkI = createGlobalPropertyf("MQ28/dynamics/FBW/livetuning/ki", 0, false, true, false)
+local tunnerkD = createGlobalPropertyf("MQ28/dynamics/FBW/livetuning/kd", 0, false, true, false)
+
 local test_tbl = {
     x = 0,
     y = 0,
     w = 700,
     h = 500,
     xlim = 5, --in seconds
-    ylim = {-200000, 200000},
+    ylim = {-40, 40},
     xbars = {1, 2, 3, 4},
     ybars = nil,
     data = {},
@@ -140,12 +144,29 @@ local function Grapher_draw(tbl)
     sasl.gl.resetClipArea()
 end
 
+local function initPIDTunner(PIDobj)
+    set(tunnerkP, PIDobj.kp)
+    set(tunnerkI, PIDobj.ki)
+    set(tunnerkD, PIDobj.kd)
+end
+
+local function PIDTunner(PIDobj)
+    PIDobj.kp = get(tunnerkP)
+    PIDobj.ki = get(tunnerkI)
+    PIDobj.kd = get(tunnerkD)
+end
+
+
+initPIDTunner(FBW.PIDs.q)
 function update()
     if not FBW_PID_debug_window:isVisible() then return end
 
+    PIDTunner(FBW.PIDs.q)
+
     Grapher_update(test_tbl, {
-        ["alpha PID output"] = {graph = true, number = true, color = ECAM_WHITE, value = FBW.PIDs.alphaMax.output},
-        ["q PID output"] = {graph = true, number = true, color = ECAM_MAGENTA, value = FBW.PIDs.q.output},
+        ["alphaMax PID output"] = {graph = true, number = true, color = ECAM_RED, value = FBW.PIDs.alphaMax.output},
+        ["Q PID output"] = {graph = true, number = true, color = ECAM_MAGENTA, value = FBW.PIDs.q.output},
+        ["alphaMin PID output"] = {graph = true, number = true, color = ECAM_WHITE, value = FBW.PIDs.alphaMin.output},
         --NY = {graph = true, number = true, color = ECAM_GREEN, value = FBW.vertical.dynamics.Path_Load_Factor("y")},
         --NZ = {graph = true, number = true, color = ECAM_BLUE, value = FBW.vertical.dynamics.Path_Load_Factor("z")},
     })

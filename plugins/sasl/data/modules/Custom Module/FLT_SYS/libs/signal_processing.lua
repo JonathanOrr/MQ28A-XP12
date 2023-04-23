@@ -14,6 +14,8 @@
 -------------------------------------------------------------------------------
 
 function SmoothRescale(k, in1, out1, in2, out2, x)
+    if out2 - out1 == 0 then return out1 end
+
     k = math.max(out1, out2) == out2 and k or -k
 
     x = Math_clamp(x, in1, in2)
