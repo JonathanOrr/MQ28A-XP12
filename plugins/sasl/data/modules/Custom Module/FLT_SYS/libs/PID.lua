@@ -62,11 +62,7 @@ function BPPID:backPropagation(PO)
 end
 
 function BPPID:integration()
-    if self.kbp < 1 then
-        self.I = Math_clamp(self.I + self.ki * self.error * get(DELTA_TIME) + self.BP, self.minout, self.maxout)
-    else
-        self.I = self.I + self.ki * self.error * get(DELTA_TIME) + self.BP
-    end
+    self.I = Math_clamp(self.I + self.ki * self.error * get(DELTA_TIME) + self.BP, self.minout, self.maxout)
 end
 
 function BPPID:getOutput()
