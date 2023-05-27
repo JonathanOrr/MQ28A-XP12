@@ -795,6 +795,9 @@ Flightmodel_PROP_SDE_FORCE = globalProperty("sim/flightmodel/forces/fside_prop")
 Flightmodel_AERO_NRM_FORCE = globalProperty("sim/flightmodel/forces/fnrml_aero")
 Flightmodel_AERO_AXL_FORCE = globalProperty("sim/flightmodel/forces/faxil_aero")
 Flightmodel_AERO_SDE_FORCE = globalProperty("sim/flightmodel/forces/fside_aero")
+Flightmodel_PLG_NRM_FORCE  = globalProperty("sim/flightmodel/forces/fnrml_plug_acf")
+Flightmodel_PLG_AXL_FORCE  = globalProperty("sim/flightmodel/forces/faxil_plug_acf")
+Flightmodel_PLG_SDE_FORCE  = globalProperty("sim/flightmodel/forces/fside_plug_acf")
 Flightmodel_TOT_NRM_FORCE  = globalProperty("sim/flightmodel/forces/fnrml_total")
 Flightmodel_TOT_AXL_FORCE  = globalProperty("sim/flightmodel/forces/faxil_total")
 Flightmodel_TOT_SDE_FORCE  = globalProperty("sim/flightmodel/forces/fside_total")
@@ -847,16 +850,29 @@ FBW_flare_mode_computed_Q =    createGlobalPropertyf("a321neo/dynamics/FBW/syste
 --spdbrake
 SPDBRK_RAT = globalProperty("sim/flightmodel2/controls/speedbrake_ratio")
 --ailerons
-L_AIL = globalProperty("sim/flightmodel/controls/wing1l_ail1def") -- -30 deg up 30 deg down
-R_AIL = globalProperty("sim/flightmodel/controls/wing1r_ail1def") -- -30 deg up 30 deg down
+L_AIL = globalProperty("sim/flightmodel/controls/wing2l_fla1def") -- -30 deg up 30 deg down
+R_AIL = globalProperty("sim/flightmodel/controls/wing2r_fla1def") -- -30 deg up 30 deg down
+--flaps
+L_FLAPERON = {}
+L_FLAPERON[1] = globalProperty("sim/flightmodel/controls/wing2l_fla2def") -- -30 deg up 30 deg down
+L_FLAPERON[2] = globalProperty("sim/flightmodel/controls/wing2l_ail2def") -- -30 deg up 30 deg down
+R_FLAPERON = {}
+R_FLAPERON[1] = globalProperty("sim/flightmodel/controls/wing2r_fla2def") -- -30 deg up 30 deg down
+R_FLAPERON[2] = globalProperty("sim/flightmodel/controls/wing2r_ail2def") -- -30 deg up 30 deg down
 --high lift devices
 Slats = globalProperty("sim/flightmodel2/controls/slat1_deploy_ratio") --deploys with flaps 0 = 0, 1 = 0.7, 2 = 0.8, 3 = 0.8, 4 = 1
+--hstabs
+L_ELEV = {}
+for i = 1, 10 do
+	L_ELEV[i] = globalProperty("sim/flightmodel2/wing/elements/element_incidence_increase[" .. 80 + i - 1 .. "]")
+end
+R_ELEV = {}
+for i = 1, 10 do
+	R_ELEV[i] = globalProperty("sim/flightmodel2/wing/elements/element_incidence_increase[" .. 90 + i - 1 .. "]")
+end
 --vstabs
-L_RUD = {}
-for i = 1, 10 do
-	L_RUD[i] = globalProperty("sim/flightmodel2/wing/elements/element_incidence_increase[" .. 100 + i - 1 .. "]")
-end
-R_RUD = {}
-for i = 1, 10 do
-	R_RUD[i] = globalProperty("sim/flightmodel2/wing/elements/element_incidence_increase[" .. 110 + i - 1 .. "]")
-end
+L_RUD = globalProperty("sim/flightmodel/controls/vstab1_rud1def")
+R_RUD = globalProperty("sim/flightmodel/controls/vstab2_rud1def")
+--vector nozzels
+L_VECT = globalProperty("sim/aircraft/prop/acf_vertcant[0]")
+R_VECT = globalProperty("sim/aircraft/prop/acf_vertcant[1]")
