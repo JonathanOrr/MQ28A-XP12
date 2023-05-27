@@ -128,6 +128,7 @@ function RateCmp:getRate(currVal)
     self.rate = (currVal - self.lastVal) / (get(TIME) - self.lastTime)
     self.lastTime = get(TIME)
     self.lastVal = currVal
+    return self.rate
 end
 
 ----------------------------------------------------------------------------------------------------
