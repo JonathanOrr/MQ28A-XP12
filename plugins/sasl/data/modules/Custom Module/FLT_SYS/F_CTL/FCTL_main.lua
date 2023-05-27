@@ -1,5 +1,6 @@
 --Class declarations-- ================================================= as separators
 ControlSurface = {
+    multiDataref = false,
     dataref = nil,
 
     def = 0,
@@ -19,6 +20,12 @@ function ControlSurface:new(o)
 end
 
 function ControlSurface:writeDataref()
+    if self.multiDataref then
+        for _, dataref in ipairs(self.dataref) do
+            set(dataref, self.def)
+        end
+    end
+
     set(self.dataref, self.def)
 end
 
@@ -41,16 +48,6 @@ function ControlSurface:actuate(defreq)
 
     self:writeDataref()
 end
---====================================================================================
-Flaperons = ControlSurface:new()
---====================================================================================
-Ruddervators = ControlSurface:new()
-
-function Ruddervators:writeDataref()
-    for i = 1, 10 do
-        set(self.dataref[i], self.def)
-    end
-end
 --=====================================================================================
 SlatsSys = ControlSurface:new{
     defsmoothmargin = 0.1,
@@ -61,7 +58,7 @@ SlatsSys = ControlSurface:new{
 }
 
 function SlatsSys:alphaDeploy()
-    local slatDefReq = Math_rescale(9, self.mindef, 13, self.maxdef, get(Alpha))
+    local slatDefReq = Math_rescale(10, self.mindef, 20, self.maxdef, get(Alpha))
     self:actuate(slatDefReq)
 end
 --=====================================================================================
@@ -123,16 +120,25 @@ end
 
 FCTL.LE_SLAT = SlatsSys:new{dataref = Slats}
 
-FCTL.L_FLAPERON = Flaperons:new{dataref = L_AIL}
-FCTL.R_FLAPERON = Flaperons:new{dataref = R_AIL}
+FCTL.L_AIL = ControlSurface:new{dataref = L_AIL}
+FCTL.R_AIL = ControlSurface:new{dataref = R_AIL}
 
-FCTL.L_RUDDERVATOR = Ruddervators:new{dataref = L_RUD}
-FCTL.R_RUDDERVATOR = Ruddervators:new{dataref = R_RUD}
+FCTL.L_FLAPERON = ControlSurface:new{dataref = L_FLAPERON, multiDataref = true}
+FCTL.R_FLAPERON = ControlSurface:new{dataref = R_FLAPERON, multiDataref = true}
+
+FCTL.L_HSTABLITOR = ControlSurface:new{dataref = L_ELEV, multiDataref = true}
+FCTL.R_HSTABLITOR = ControlSurface:new{dataref = R_ELEV, multiDataref = true}
+
+FCTL.L_RUDDER = ControlSurface:new{dataref = L_RUD}
+FCTL.R_RUDDER = ControlSurface:new{dataref = R_RUD}
+
+FCTL.L_VEC = ControlSurface:new{dataref = L_VECT}
+FCTL.R_VEC = ControlSurface:new{dataref = R_VECT}
 
 local M28SuperManSys = superManeuverSys:new{
     L = {
         dataref = Flightmodel_PLG_L,
-        limit = 100000, --the total force the system can add
+        limit = 500000, --the total force the system can add
         maxTAS = 70, --the max speed where moment is added
         surfs = {
             {obj = FCTL.L_FLAPERON, reversed = false},
@@ -141,22 +147,22 @@ local M28SuperManSys = superManeuverSys:new{
     },
     M = {
         dataref = Flightmodel_PLG_M,
-        limit = 100000,
+        limit = 0,--500000,
         maxTAS = 70,
         surfs = {
-            {obj = FCTL.L_FLAPERON, reversed = true},
-            {obj = FCTL.R_FLAPERON, reversed = true},
-            {obj = FCTL.L_RUDDERVATOR, reversed = true},
-            {obj = FCTL.R_RUDDERVATOR, reversed = true},
+            --{obj = FCTL.L_FLAPERON, reversed = true},
+            --{obj = FCTL.R_FLAPERON, reversed = true},
+            {obj = FCTL.L_HSTABLITOR, reversed = true},
+            {obj = FCTL.R_HSTABLITOR, reversed = true},
         }
     },
     N = {
         dataref = Flightmodel_PLG_N,
-        limit = 50000,
+        limit = 0,--500000,
         maxTAS = 70,
         surfs = {
-            {obj = FCTL.L_RUDDERVATOR, reversed = true},
-            {obj = FCTL.R_RUDDERVATOR, reversed = false},
+            {obj = FCTL.L_RUDDER, reversed = true},
+            {obj = FCTL.R_RUDDER, reversed = false},
         }
     },
 }
@@ -164,11 +170,21 @@ local M28SuperManSys = superManeuverSys:new{
 function update()
     FCTL.LE_SLAT:alphaDeploy()
 
-    FCTL.L_FLAPERON:actuate(-get(FBW_PITCH_DEF) + get(FBW_ROLL_DEF))
-    FCTL.R_FLAPERON:actuate(-get(FBW_PITCH_DEF) - get(FBW_ROLL_DEF))
+    FCTL.L_AIL:actuate( get(FBW_ROLL_DEF) - get(SPDBRK_RAT) * 30)--get(FBW_PITCH_DEF) + get(FBW_ROLL_DEF))
+    FCTL.R_AIL:actuate(-get(FBW_ROLL_DEF) - get(SPDBRK_RAT) * 30)--get(FBW_PITCH_DEF) - get(FBW_ROLL_DEF))
 
-    FCTL.L_RUDDERVATOR:actuate(-get(FBW_PITCH_DEF) - get(FBW_YAW_DEF))
-    FCTL.R_RUDDERVATOR:actuate(-get(FBW_PITCH_DEF) + get(FBW_YAW_DEF))
+    local flapDef = 30 * (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3
+    FCTL.L_FLAPERON:actuate(Math_rescale(-60, -30, -30, 0, get(FBW_ROLL_DEF)) + Math_rescale(30, 0, 60,  30, get(FBW_ROLL_DEF)) + flapDef)
+    FCTL.R_FLAPERON:actuate(Math_rescale(-60,  30, -30, 0, get(FBW_ROLL_DEF)) + Math_rescale(30, 0, 60, -30, get(FBW_ROLL_DEF)) + flapDef)
 
-    M28SuperManSys:applyMoments()
+    FCTL.L_HSTABLITOR:actuate(-get(FBW_PITCH_DEF) + get(FBW_ROLL_DEF) / 2)
+    FCTL.R_HSTABLITOR:actuate(-get(FBW_PITCH_DEF) - get(FBW_ROLL_DEF) / 2)
+
+    FCTL.L_RUDDER:actuate(-get(FBW_YAW_DEF) + get(SPDBRK_RAT) * 30)
+    FCTL.R_RUDDER:actuate( get(FBW_YAW_DEF) + get(SPDBRK_RAT) * 30)
+
+    FCTL.L_VEC:actuate(-get(FBW_PITCH_DEF) + get(FBW_ROLL_DEF) / 2)
+    FCTL.R_VEC:actuate(-get(FBW_PITCH_DEF) - get(FBW_ROLL_DEF) / 2)
+
+    --M28SuperManSys:applyMoments()
 end
