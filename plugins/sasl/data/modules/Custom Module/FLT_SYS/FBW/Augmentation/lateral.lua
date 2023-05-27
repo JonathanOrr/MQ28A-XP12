@@ -28,10 +28,14 @@ local function X_to_P(x)
 end
 --========================
 
-FBW.PIDs.p = BPPID:new{kp = 0.085, ki = 0.45, kbp = 1, minout = -30, maxout = 30}
+FBW.PIDs.p = BPPID:new{kp = 0.15, ki = 0.25, kd = 0.0025, kbp = 1, minout = -60, maxout = 60}
 --FBW.PIDs.p = PID:new{kp = 800, ki = 100, kd = 0, minout = -100000, maxout = 100000}
 
 function update()
+    if get(Front_gear_on_ground) == 1 and get(Left_gear_on_ground) == 1 and get(Right_gear_on_ground) == 1 then
+        FBW.PIDs.p.I = 0
+    end
+
     local PO = (
             FCTL.L_FLAPERON.def - get(FBW_PITCH_DEF) +
             FCTL.R_FLAPERON.def - get(FBW_PITCH_DEF)
