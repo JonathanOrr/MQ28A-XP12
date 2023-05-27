@@ -46,6 +46,7 @@ panelWidth3d = 1024
 panelHeight3d = 1024
 
 components = {
+  HUD {},
   FLT_SYS_main {}
 }
 
