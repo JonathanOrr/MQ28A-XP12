@@ -16,14 +16,7 @@ function Neutral_Nz()
 
     local Nz = math.cos(RAD_VPATH) / math.cos(RAD_BANK_ClAMPED)
 
-    local output = Nz
-    if BANK >= MAX_BANK_COMP then
-        output = SmoothRescale(1.45, MAX_BANK_COMP, Nz, 90, math.cos(RAD_VPATH), BANK)
-    elseif BANK <= -MAX_BANK_COMP then
-        output = SmoothRescale(1.45, -90, math.cos(RAD_VPATH), -MAX_BANK_COMP, Nz, BANK)
-    end
-
-    return output
+    return math.cos(RAD_VPATH)
 end
 
 function ComputeCSTAR(Nz, Q)
