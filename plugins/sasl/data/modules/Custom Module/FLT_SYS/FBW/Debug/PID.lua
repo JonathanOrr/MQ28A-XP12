@@ -1,4 +1,7 @@
-local tunnerkP = createGlobalPropertyf("MQ28/dynamics/FBW/livetuning/kp", 0, false, true, false)
+include("FLT_SYS/libs/signal_processing.lua")
+include("FLT_SYS/libs/angular_rates.lua")
+
+local tunnerkP = createGlobalPropertyf("MQ28/dynamics/FBW/livetuning/kp", 1, false, true, false)
 local tunnerkI = createGlobalPropertyf("MQ28/dynamics/FBW/livetuning/ki", 0, false, true, false)
 local tunnerkD = createGlobalPropertyf("MQ28/dynamics/FBW/livetuning/kd", 0, false, true, false)
 
@@ -8,7 +11,7 @@ local test_tbl = {
     w = 700,
     h = 500,
     xlim = 5, --in seconds
-    ylim = {-40, 40},
+    ylim = {-2, 2},
     xbars = {1, 2, 3, 4},
     ybars = nil,
     data = {},
@@ -156,18 +159,109 @@ local function PIDTunner(PIDobj)
     PIDobj.kd = get(tunnerkD)
 end
 
+local xprevAP = 0
+local yprevAP = 0
+
+-- Define the filter function
+local function allpass_filter(x, breakfreq, sampfreq)
+    if get(DELTA_TIME) == 0 then return 0 end
+    local dt = get(DELTA_TIME)
+
+    -- Define the filter coefficients
+    local a = (math.tan(math.pi * breakfreq * dt) - 1) / 
+              (math.tan(math.pi * breakfreq * dt) + 1)-- the feedback coefficient
+    
+    -- Calculate the filter output
+    local y = a*x + xprevAP - a*yprevAP
+    
+    -- Update the filter state variables
+    xprevAP = x
+    yprevAP = y
+    
+    -- Return the filter output
+    return y
+end
+
+local vpprevSAP = 0
+local vprevSAP = 0
+
+local function secOrdAPfilter(x, breakfreq, BW)
+    if get(DELTA_TIME) == 0 then return 0 end
+    local dt = get(DELTA_TIME)
+
+    -- Define the filter coefficients
+    local c = (math.tan(math.pi * BW * dt) - 1) /
+              (math.tan(math.pi * BW * dt) + 1)
+    local d = -math.cos(2*math.pi * breakfreq * dt)
+
+    -- Calculate the filter output
+    local v = x - d*(1-c)*vprevSAP + c*vpprevSAP
+    local y = -c*v + d*(1-c)*vprevSAP + vpprevSAP
+
+    vpprevSAP = vprevSAP
+    vprevSAP = v
+
+    -- Return the filter output
+    return y
+end
+
+local function f(x)
+    return math.floor(math.cos(2*math.pi*x)) + 0.1*(math.random() - 0.5)*2 --+ 0.1*math.cos(10*2*math.pi*x)
+end
+
+
+local LowPass = {freq = 10}
+
+function LowPass:new(o)
+    o = o or {}
+    setmetatable(o, self)
+    self.__index = self
+    return o
+end
+
+function LowPass:filterOut(x)
+    local dt = get(DELTA_TIME)
+    local RC = 1 / (2*math.pi * self.freq)
+    local a = dt / (RC + dt)
+
+    if self.prev_y == nil then
+        self.prev_y = a * x
+    else
+        self.prev_y = a * x + (1-a) * self.prev_y
+    end
+
+    return self.prev_y
+end
+
+local newLP = LowPass:new{freq=1}
+local newLP2 = LowPass:new{freq=1}
+local newLP3 = LowPass:new{freq=1}
+
+local CL = globalProperty("sim/flightmodel/misc/cl_overall")
+local CD = globalProperty("sim/flightmodel/misc/cd_overall")
 
 initPIDTunner(FBW.PIDs.q)
 function update()
     if not FBW_PID_debug_window:isVisible() then return end
 
-    PIDTunner(FBW.PIDs.q)
+    --PIDTunner(FBW.PIDs.q)
 
+    newLP.freq = get(tunnerkD)
+    newLP2.freq = get(tunnerkD)
+    newLP3.freq = get(tunnerkD)
+
+    local temp = get(Alpha)--f(get(TIME))
+    local cascadefilt = newLP:filterOut(temp)
+    cascadefilt = newLP2:filterOut(cascadefilt)
     Grapher_update(test_tbl, {
-        ["alphaMax PID output"] = {graph = true, number = true, color = ECAM_RED, value = FBW.PIDs.alphaMax.output},
-        ["Q PID output"] = {graph = true, number = true, color = ECAM_MAGENTA, value = FBW.PIDs.q.output},
-        --NY = {graph = true, number = true, color = ECAM_GREEN, value = FBW.vertical.dynamics.Path_Load_Factor("y")},
-        --NZ = {graph = true, number = true, color = ECAM_BLUE, value = FBW.vertical.dynamics.Path_Load_Factor("z")},
+        ["P PID err"] = {graph = true, number = true, color = ECAM_RED, value = get(CL)},--FBW.PIDs.q.error},
+        --["P PID P"] = {graph = true, number = true, color = ECAM_WHITE, value = FBW.PIDs.q.P},
+        --["P PID I"] = {graph = true, number = true, color = ECAM_BLUE, value = FBW.PIDs.q.I},
+        --["P PID D"] = {graph = true, number = true, color = ECAM_GREEN, value = FBW.PIDs.q.D},
+        --["P PID output"] = {graph = true, number = true, color = ECAM_YELLOW, value = FBW.PIDs.q.output},
+        --["raw"] = {graph = true, number = true, color = ECAM_WHITE, value = getVpathQ()},
+        --["filtered"] = {graph = true, number = true, color = ECAM_YELLOW, value = 0.5*temp + 0.5*allpass_filter(temp, get(tunnerkP))},
+        --["old filter"] = {graph = true, number = true, color = ECAM_GREEN, value = newLP3:filterOut(cascadefilt)},
     })
 end
 
