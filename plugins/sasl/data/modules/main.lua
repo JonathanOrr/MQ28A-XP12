@@ -30,6 +30,7 @@ sasl.options.setAircraftPanelRendering(true)
 sasl.options.setInteractivity(true)
 sasl.options.set3DRendering(true)
 
+
 -- devel
 sasl.options.setLuaErrorsHandling(SASL_STOP_PROCESSING)
 
@@ -38,11 +39,11 @@ math.randomseed( os.time() )
 
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS")
 
-position = {0, 0, 4096, 4096}
-size = { 4096, 4096 }
+position = {0, 0, 1024, 1024}
+size = { 1024, 1024 }
 
-panelWidth3d = 4096
-panelHeight3d = 4096
+panelWidth3d = 1024
+panelHeight3d = 1024
 
 components = {
   FLT_SYS_main {}
