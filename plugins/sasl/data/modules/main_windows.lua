@@ -33,3 +33,17 @@ FBW_PID_debug_window = contextWindow {
     PID {position = { 0 , 0 , 700 , 500 }}
   };
 }
+
+-- FBW_3D_debug_window = contextWindow {
+--   name = "FBW 3D DEBUG";
+--   position = { 100 , 100 , 500 , 500 };
+--   noBackground = true ;
+--   proportional = true ;
+--   minimumSize = { 500 , 500 };
+--   maximumSize = { 500 , 500 };
+--   gravity = { 0 , 1 , 0 , 1 };
+--   visible = true;
+--   components = {
+--     render3D {position = { 0 , 0 , 500 , 500 }}
+--   };
+-- }

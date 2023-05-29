@@ -20,6 +20,9 @@
 function Show_hide_PID_UI()
   FBW_PID_debug_window:setIsVisible(not FBW_PID_debug_window:isVisible())
 end
+function Show_hide_3D_UI()
+  FBW_3D_debug_window:setIsVisible(not FBW_3D_debug_window:isVisible())
+end
 
 -- create top level menu in plugins menu
 Menu_master	= sasl.appendMenuItem (PLUGINS_MENU_ID, "MQ28" )
@@ -30,3 +33,4 @@ Menu_main	= sasl.createMenu ("", PLUGINS_MENU_ID, Menu_master)
 Menu_debug_item	= sasl.appendMenuItem (Menu_main, "Debug" )
 Menu_debug	= sasl.createMenu ("", Menu_main, Menu_debug_item)
 ShowHidePIDUI	= sasl.appendMenuItem(Menu_debug, "Show/Hide PID UI", Show_hide_PID_UI)
+ShowHide3DUI	= sasl.appendMenuItem(Menu_debug, "Show/Hide 3D UI", Show_hide_3D_UI)
