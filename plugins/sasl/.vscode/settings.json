@@ -7,5 +7,8 @@
         "TEXT_ALIGN_LEFT",
         "MENU_CHECKED",
         "MENU_UNCHECKED"
+    ],
+    "Lua.diagnostics.disable": [
+        "deprecated"
     ]
 }
